@@ -1,4 +1,4 @@
-package br.com.caioschultz.MovieHub.dto;
+package br.com.caioschultz.MovieHub.mapper;
 
 import br.com.caioschultz.MovieHub.controller.request.CategoryRequest;
 import br.com.caioschultz.MovieHub.controller.response.CategoryResponse;

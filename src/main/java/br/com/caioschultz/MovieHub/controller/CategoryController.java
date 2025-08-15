@@ -1,6 +1,7 @@
 package br.com.caioschultz.MovieHub.controller;
 
-import br.com.caioschultz.MovieHub.dto.CategoryDTO;
+import br.com.caioschultz.MovieHub.controller.request.CategoryRequest;
+import br.com.caioschultz.MovieHub.controller.response.CategoryResponse;
 import br.com.caioschultz.MovieHub.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,16 @@ public class CategoryController {
 
     // criar categoria
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody CategoryDTO categoryDTO){
-        CategoryDTO savedCategory = service.create(categoryDTO);
+    public ResponseEntity<?> create(@RequestBody CategoryRequest request){
+        CategoryResponse response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Categoria criada com sucesso!");
+                .body(response);
     }
 
     // Listar todas as categorias
     @GetMapping
     public ResponseEntity<?> getAllCategories(){
-        List<CategoryDTO> categories = service.getAllCategories();
+        List<CategoryResponse> categories = service.getAllCategories();
         if(categories == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Não há nenhuma categoria na lista!");
@@ -42,7 +43,7 @@ public class CategoryController {
     // Listar categoria por id
     @GetMapping("/list/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long id){
-        CategoryDTO category = service.getCategoryById(id);
+        CategoryResponse category = service.getCategoryById(id);
         if(category != null){
             return ResponseEntity.ok(category);
         }
@@ -54,9 +55,9 @@ public class CategoryController {
 
     // atualizar categoria
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id){
+    public ResponseEntity<?> update(@RequestBody CategoryRequest request, @PathVariable Long id){
         if(service.getCategoryById(id) != null){
-            CategoryDTO updatedCategory = service.update(categoryDTO, id);
+            CategoryResponse updatedCategory = service.update(request, id);
             return ResponseEntity.ok("Categoria atualizada com sucesso!");
         }
         else {

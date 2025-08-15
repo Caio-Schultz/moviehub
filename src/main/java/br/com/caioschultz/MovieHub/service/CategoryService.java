@@ -1,7 +1,8 @@
 package br.com.caioschultz.MovieHub.service;
 
-import br.com.caioschultz.MovieHub.dto.CategoryDTO;
-import br.com.caioschultz.MovieHub.dto.CategoryMapper;
+import br.com.caioschultz.MovieHub.controller.request.CategoryRequest;
+import br.com.caioschultz.MovieHub.controller.response.CategoryResponse;
+import br.com.caioschultz.MovieHub.mapper.CategoryMapper;
 import br.com.caioschultz.MovieHub.entity.Category;
 import br.com.caioschultz.MovieHub.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -21,17 +22,17 @@ public class CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
-    public CategoryDTO create(CategoryDTO categoryDTO){
-        Category category = repository.save(categoryMapper.map(categoryDTO));
-        CategoryDTO savedCategory = categoryMapper.map(category);
+    public CategoryResponse create(CategoryRequest request){
+        Category category = repository.save(categoryMapper.toCategory(request));
+        CategoryResponse savedCategory = categoryMapper.toResponse(category);
         return savedCategory;
     }
 
-    public List<CategoryDTO> getAllCategories(){
+    public List<CategoryResponse> getAllCategories(){
         List<Category> categories = repository.findAll();
         if(!categories.isEmpty()) {
             return categories.stream()
-                    .map(categoryMapper::map)
+                    .map(category -> categoryMapper.toResponse(category))
                     .collect(Collectors.toList());
         }
         else {
@@ -39,18 +40,18 @@ public class CategoryService {
         }
     }
 
-    public CategoryDTO getCategoryById(Long id){
+    public CategoryResponse getCategoryById(Long id){
         Optional<Category> category = repository.findById(id);
-        return category.map(categoryMapper::map)
+        return category.map(response -> categoryMapper.toResponse(response))
                    .orElse(null);
     }
 
-    public CategoryDTO update(CategoryDTO categoryDTO, Long id){
+    public CategoryResponse update(CategoryRequest request, Long id){
         if(repository.findById(id).isPresent()){
-            Category category = categoryMapper.map(categoryDTO);
+            Category category = categoryMapper.toCategory(request);
             category.setId(id);
             Category savedCategory = repository.save(category);
-            CategoryDTO updatedCategory = categoryMapper.map(savedCategory);
+            CategoryResponse updatedCategory = categoryMapper.toResponse(savedCategory);
             return updatedCategory;
         }
         else{

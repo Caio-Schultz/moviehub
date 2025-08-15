@@ -24,7 +24,7 @@ public class StreamingController {
         List<StreamingResponse> streamings = service.getAllStreamings();
         if(streamings == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Não há nenhum item na lista!");
+                    .body("Não há nenhuma plataforma de Streaming na lista!");
         }
         else {
             return ResponseEntity.ok(streamings);

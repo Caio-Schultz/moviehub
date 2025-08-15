@@ -2,7 +2,7 @@ package br.com.caioschultz.MovieHub.service;
 
 import br.com.caioschultz.MovieHub.controller.request.StreamingRequest;
 import br.com.caioschultz.MovieHub.controller.response.StreamingResponse;
-import br.com.caioschultz.MovieHub.dto.StreamingMapper;
+import br.com.caioschultz.MovieHub.mapper.StreamingMapper;
 import br.com.caioschultz.MovieHub.entity.Streaming;
 import br.com.caioschultz.MovieHub.repository.StreamingRepository;
 import org.springframework.stereotype.Service;
