@@ -3,6 +3,7 @@ package br.com.caioschultz.MovieHub.mapper;
 import br.com.caioschultz.MovieHub.controller.request.StreamingRequest;
 import br.com.caioschultz.MovieHub.controller.response.StreamingResponse;
 import br.com.caioschultz.MovieHub.entity.Streaming;
+
 import org.springframework.stereotype.Component;
 
 @Component

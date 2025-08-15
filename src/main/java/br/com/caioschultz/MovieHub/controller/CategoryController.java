@@ -41,7 +41,7 @@ public class CategoryController {
     }
 
     // Listar categoria por id
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable Long id){
         CategoryResponse category = service.getCategoryById(id);
         if(category != null){
@@ -58,7 +58,7 @@ public class CategoryController {
     public ResponseEntity<?> update(@RequestBody CategoryRequest request, @PathVariable Long id){
         if(service.getCategoryById(id) != null){
             CategoryResponse updatedCategory = service.update(request, id);
-            return ResponseEntity.ok("Categoria atualizada com sucesso!");
+            return ResponseEntity.ok(updatedCategory);
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
