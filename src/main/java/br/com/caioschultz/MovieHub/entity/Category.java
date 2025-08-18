@@ -2,8 +2,10 @@ package br.com.caioschultz.MovieHub.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @Table(name = "tb_category")
 @NoArgsConstructor
