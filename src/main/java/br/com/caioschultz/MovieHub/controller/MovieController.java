@@ -2,6 +2,8 @@ package br.com.caioschultz.MovieHub.controller;
 
 import br.com.caioschultz.MovieHub.controller.request.MovieRequest;
 import br.com.caioschultz.MovieHub.controller.response.MovieResponse;
+import br.com.caioschultz.MovieHub.entity.Movie;
+import br.com.caioschultz.MovieHub.mapper.MovieMapper;
 import br.com.caioschultz.MovieHub.service.MovieService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService service;
+    private final MovieMapper movieMapper;
 
-    public MovieController(MovieService service) {
+    public MovieController(MovieService service, MovieMapper movieMapper) {
         this.service = service;
+        this.movieMapper = movieMapper;
     }
 
     @GetMapping
@@ -47,9 +51,9 @@ public class MovieController {
 
     @PostMapping("/create")
     public ResponseEntity<MovieResponse> create(@RequestBody MovieRequest request){
-        MovieResponse movie = service.create(request);
+        MovieResponse response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(movie);
+                .body(response);
 
     }
 

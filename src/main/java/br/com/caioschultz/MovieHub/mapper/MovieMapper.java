@@ -7,6 +7,8 @@ import br.com.caioschultz.MovieHub.controller.response.StreamingResponse;
 import br.com.caioschultz.MovieHub.entity.Category;
 import br.com.caioschultz.MovieHub.entity.Movie;
 import br.com.caioschultz.MovieHub.entity.Streaming;
+import br.com.caioschultz.MovieHub.repository.CategoryRepository;
+import br.com.caioschultz.MovieHub.repository.StreamingRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,22 +18,25 @@ public class MovieMapper {
 
     private final CategoryMapper categoryMapper;
     private final StreamingMapper streamingMapper;
+    private final CategoryRepository categoryRepository;
+    private final StreamingRepository streamingRepository;
 
-    public MovieMapper(CategoryMapper categoryMapper, StreamingMapper streamingMapper) {
+    public MovieMapper(CategoryMapper categoryMapper, StreamingMapper streamingMapper, CategoryRepository categoryRepository, StreamingRepository streamingRepository) {
         this.categoryMapper = categoryMapper;
         this.streamingMapper = streamingMapper;
+        this.categoryRepository = categoryRepository;
+        this.streamingRepository = streamingRepository;
     }
 
-
     public Movie toMovie(MovieRequest request){
-
-
         List<Category> categories =  request.categories().stream()
-                .map(categoryId -> Category.builder().id(categoryId).build())
+                .map(categoryId -> categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new RuntimeException("Categoria não encontrada: " + categoryId)))
                 .toList();
 
         List<Streaming> streamings = request.streamings().stream()
-                .map(streamingId -> Streaming.builder().id(streamingId).build())
+                .map(streamingId -> streamingRepository.findById(streamingId)
+                        .orElseThrow(() -> new RuntimeException("Streaming não encontrado: " + streamingId)))
                 .toList();
 
         return Movie.builder()
