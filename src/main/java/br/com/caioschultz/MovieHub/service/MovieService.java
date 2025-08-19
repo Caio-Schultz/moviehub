@@ -4,13 +4,12 @@ import br.com.caioschultz.MovieHub.controller.request.MovieRequest;
 import br.com.caioschultz.MovieHub.controller.response.MovieResponse;
 import br.com.caioschultz.MovieHub.entity.Category;
 import br.com.caioschultz.MovieHub.entity.Movie;
-import br.com.caioschultz.MovieHub.entity.Streaming;
 import br.com.caioschultz.MovieHub.mapper.MovieMapper;
 import br.com.caioschultz.MovieHub.repository.CategoryRepository;
 import br.com.caioschultz.MovieHub.repository.MovieRepository;
+import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,12 +19,10 @@ public class MovieService {
 
     private final MovieRepository repository;
     private final MovieMapper movieMapper;
-    private final CategoryRepository categoryRepository;
 
-    public MovieService(MovieRepository repository, MovieMapper movieMapper, CategoryRepository categoryRepository) {
+    public MovieService(MovieRepository repository, MovieMapper movieMapper) {
         this.repository = repository;
         this.movieMapper = movieMapper;
-        this.categoryRepository = categoryRepository;
     }
 
     public List<MovieResponse> getAllMovies(){
@@ -63,6 +60,14 @@ public class MovieService {
         else {
             return null;
         }
+    }
+
+    public List<MovieResponse> getMoviesByCategory(Long categoryId){
+        List<Movie> movies = repository.findMovieByCategories(List.of(Category.builder().id(categoryId).build()));
+        List<MovieResponse> response = movies.stream()
+                .map(movieMapper::toResponse)
+                .toList();
+        return response;
     }
 
     public void delete(Long id){
