@@ -11,17 +11,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /*private final SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
 
     public SecurityConfig(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
     }
-    */
+
     // @Bean indica para o Spring gerenciar esse metodo
     // @Bean indica um contexto, nesse caso um contexto de segurança
     @Bean
@@ -34,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "moviehub/auth/login").permitAll()  // Autoriza com que qualquer pessoa possa usar o endpoint para fazer login
                         .anyRequest().authenticated()     // Autoriza com que qualquer pessoa autenticado possa acessar qualquer endpoint
                 )
-                //.addFilter()
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // acontece um filtro antes da chamada
                 .build();
     }
 

@@ -3,10 +3,13 @@ package br.com.caioschultz.MovieHub.config;
 import br.com.caioschultz.MovieHub.entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Optional;
 
 @Component
 public class TokenService {
@@ -28,5 +31,23 @@ public class TokenService {
                 .withIssuedAt(Instant.now()) // Quando o token foi gerado
                 .withIssuer("Api MovieHub") // Quem gerou o token
                 .sign(algorithm);  // setta um algoritmo de criptografia do token
+    }
+
+    public Optional<JWTUserData> verifyToken(String token){
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            DecodedJWT verify = JWT.require(algorithm)
+                    .build()
+                    .verify(token);  // JWT verifica se o token é válido
+
+            return Optional.of(new JWTUserData(verify.getClaim("userId").asLong(),
+                    verify.getClaim("username").asString(),
+                    verify.getSubject()));
+        }
+        catch (JWTVerificationException exception){
+            return Optional.empty();
+        }
     }
 }
