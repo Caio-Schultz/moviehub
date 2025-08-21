@@ -3,6 +3,7 @@ package br.com.caioschultz.MovieHub.controller;
 import br.com.caioschultz.MovieHub.controller.request.StreamingRequest;
 import br.com.caioschultz.MovieHub.controller.response.StreamingResponse;
 import br.com.caioschultz.MovieHub.service.StreamingService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +45,14 @@ public class StreamingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<StreamingResponse> create(@RequestBody StreamingRequest request){
+    public ResponseEntity<StreamingResponse> create(@Valid @RequestBody StreamingRequest request){
         StreamingResponse response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody StreamingRequest request, @PathVariable Long id){
+    public ResponseEntity<?> update(@Valid @RequestBody StreamingRequest request, @PathVariable Long id){
         if(service.getStreamingById(id) != null){
             StreamingResponse response = service.update(request, id);
             return ResponseEntity.ok(response);

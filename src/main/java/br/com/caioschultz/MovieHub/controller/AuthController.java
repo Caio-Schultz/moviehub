@@ -6,10 +6,12 @@ import br.com.caioschultz.MovieHub.controller.request.UserRequest;
 import br.com.caioschultz.MovieHub.controller.response.LoginResponse;
 import br.com.caioschultz.MovieHub.controller.response.UserResponse;
 import br.com.caioschultz.MovieHub.entity.User;
+import br.com.caioschultz.MovieHub.exception.UsernameOrPasswordInvalidException;
 import br.com.caioschultz.MovieHub.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,15 +42,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
-        // Faz a parte de autenticação a partir do email e da senha. Essas classes utilizam toda a config feita no AuthService e no User por baixo dos panos
-        UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.email(), request.password());
-        Authentication authenticate = authenticationManager.authenticate(userAndPass);
 
-        User user = (User) authenticate.getPrincipal();
+        try {
+            // Faz a parte de autenticação a partir do email e da senha. Essas classes utilizam toda a config feita no AuthService e no User por baixo dos panos
+            UsernamePasswordAuthenticationToken userAndPass = new UsernamePasswordAuthenticationToken(request.email(), request.password());
+            Authentication authenticate = authenticationManager.authenticate(userAndPass);
 
-        String token = tokenService.generateToken(user);
+            User user = (User) authenticate.getPrincipal();
 
-        return ResponseEntity.ok(new LoginResponse(token));
+            String token = tokenService.generateToken(user);
+
+            return ResponseEntity.ok(new LoginResponse(token));
+        }
+        catch (BadCredentialsException e) {
+            throw new UsernameOrPasswordInvalidException("Usuário ou senha inválida");
+        }
 
     }
 

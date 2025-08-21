@@ -1,5 +1,6 @@
 package br.com.caioschultz.MovieHub.config;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,6 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // disabilita essa configuração padrão do Spring para fazer a minha própria config embaixo
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Toda chamada para aplicação é verificada se vem de alguém válido para fazer a chamada
                 .authorizeHttpRequests(authorize -> authorize
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll() // Caso for passado um token errado, será retornado os HttpStatus corretos e não apenas um 403 (Forbidden)
                         .requestMatchers(HttpMethod.POST, "moviehub/auth/create").permitAll() // Autoriza com que qualquer pessoa possa usar o endpoint para criar um usuário
                         .requestMatchers(HttpMethod.POST, "moviehub/auth/login").permitAll()  // Autoriza com que qualquer pessoa possa usar o endpoint para fazer login
                         .anyRequest().authenticated()     // Autoriza com que qualquer pessoa autenticado possa acessar qualquer endpoint

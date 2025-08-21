@@ -5,6 +5,7 @@ import br.com.caioschultz.MovieHub.controller.response.MovieResponse;
 import br.com.caioschultz.MovieHub.entity.Movie;
 import br.com.caioschultz.MovieHub.mapper.MovieMapper;
 import br.com.caioschultz.MovieHub.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class MovieController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<MovieResponse> create(@RequestBody MovieRequest request){
+    public ResponseEntity<MovieResponse> create(@Valid @RequestBody MovieRequest request){
         MovieResponse response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
@@ -58,7 +59,7 @@ public class MovieController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody MovieRequest request, @PathVariable Long id){
+    public ResponseEntity<?> update(@Valid @RequestBody MovieRequest request, @PathVariable Long id){
         if(service.getMovieById(id) != null){
             MovieResponse movie = service.update(request, id);
             return ResponseEntity.ok(movie);

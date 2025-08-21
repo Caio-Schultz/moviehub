@@ -3,6 +3,7 @@ package br.com.caioschultz.MovieHub.controller;
 import br.com.caioschultz.MovieHub.controller.request.CategoryRequest;
 import br.com.caioschultz.MovieHub.controller.response.CategoryResponse;
 import br.com.caioschultz.MovieHub.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class CategoryController {
 
     // criar categoria
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody CategoryRequest request){
+    public ResponseEntity<?> create(@Valid @RequestBody CategoryRequest request){
         CategoryResponse response = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
@@ -55,7 +56,7 @@ public class CategoryController {
 
     // atualizar categoria
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody CategoryRequest request, @PathVariable Long id){
+    public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest request, @PathVariable Long id){
         if(service.getCategoryById(id) != null){
             CategoryResponse updatedCategory = service.update(request, id);
             return ResponseEntity.ok(updatedCategory);
