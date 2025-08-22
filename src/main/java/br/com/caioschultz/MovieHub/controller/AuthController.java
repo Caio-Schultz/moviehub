@@ -4,10 +4,16 @@ import br.com.caioschultz.MovieHub.config.TokenService;
 import br.com.caioschultz.MovieHub.controller.request.LoginRequest;
 import br.com.caioschultz.MovieHub.controller.request.UserRequest;
 import br.com.caioschultz.MovieHub.controller.response.LoginResponse;
+import br.com.caioschultz.MovieHub.controller.response.StreamingResponse;
 import br.com.caioschultz.MovieHub.controller.response.UserResponse;
 import br.com.caioschultz.MovieHub.entity.User;
 import br.com.caioschultz.MovieHub.exception.UsernameOrPasswordInvalidException;
 import br.com.caioschultz.MovieHub.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +39,9 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
+    @Operation(summary = "Salvar usuário", description = "Método responsável por salvar usuários")
+    @ApiResponse(responseCode = "201", description = "Usuário salvo com sucesso!",
+            content = @Content(schema = @Schema(implementation = UserResponse.class)))
     @PostMapping("/create")
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request){
         UserResponse response = service.create(request);
@@ -40,6 +49,11 @@ public class AuthController {
                 .body(response);
     }
 
+    @Operation(summary = "Fazer login", description = "Método responsável por fazer login")
+    @ApiResponse(responseCode = "201", description = "Usuário logado!",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
+    @ApiResponse(responseCode = "400", description = "Usuário ou senha inválida.",
+    content = @Content())
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
 

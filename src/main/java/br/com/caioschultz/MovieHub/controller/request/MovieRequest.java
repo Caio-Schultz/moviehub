@@ -11,10 +11,10 @@ public record MovieRequest(@Schema(type = "string", description = "Título do fi
                            @NotEmpty(message = "Título do filme é obrigatório.") String title,
                            @Schema(type = "string", description = "Descrição do filme")
                            String description,
-                           @Schema(type = "date", description = "Data de lançamento do filme")
+                           @Schema(type = "date", description = "Data de lançamento do filme. Ex: 20/07/2014")
                            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
                            LocalDate releaseDate,
-                           @Schema(type = "double", description = "Nota de avaliação do filme")
+                           @Schema(type = "double", description = "Nota de avaliação do filme. Ex: 7.8")
                            double rating,
                            @Schema(type = "array", description = "Lista de IDs das categorias do filme")
                            List<Long> categories,

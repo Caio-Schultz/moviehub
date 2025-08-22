@@ -1,4 +1,9 @@
 package br.com.caioschultz.MovieHub.controller.response;
 
-public record StreamingResponse(Long id, String name) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record StreamingResponse(@Schema(type = "long", description = "Id do streaming")
+                                Long id,
+                                @Schema(type = "string",description = "Nome do streaming")
+                                String name) {
 }
