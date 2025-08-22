@@ -34,7 +34,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll() // Caso for passado um token errado, será retornado os HttpStatus corretos e não apenas um 403 (Forbidden)
                         .requestMatchers(HttpMethod.POST, "moviehub/auth/create").permitAll() // Autoriza com que qualquer pessoa possa usar o endpoint para criar um usuário
-                        .requestMatchers(HttpMethod.POST, "moviehub/auth/login").permitAll()  // Autoriza com que qualquer pessoa possa usar o endpoint para fazer login
+                        .requestMatchers(HttpMethod.POST, "moviehub/auth/login").permitAll() // Autoriza com que qualquer pessoa possa usar o endpoint para fazer login
+                        .requestMatchers(HttpMethod.GET, "/api/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/swagger/**").permitAll()
                         .anyRequest().authenticated()     // Autoriza com que qualquer pessoa autenticado possa acessar qualquer endpoint
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // acontece um filtro antes da chamada
